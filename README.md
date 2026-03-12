@@ -119,14 +119,25 @@ Install Postfix on the manager and configure it as a Gmail relay. Then copy `scr
 
 See [docs/email-setup.md](docs/email-setup.md) for step-by-step instructions.
 
-### 5. Configure FIM on agent
+### 5. Configure FIM from the manager
 
-Ensure the agent `ossec.conf` monitors the Downloads directory in realtime:
+On the Wazuh manager, edit the shared agent config:
 
-```xml
-<directories realtime="yes" check_all="yes">/home/ubuntu/Downloads</directories>
+```bash
+sudo nano /var/ossec/etc/shared/default/agent.conf
 ```
 
+Add:
+
+```xml
+<agent_config>
+  <syscheck>
+    <directories realtime="yes" check_all="yes">/home/*/Downloads</directories>
+  </syscheck>
+</agent_config>
+```
+
+This pushes FIM monitoring to all agents automatically — no need to edit each agent individually.
 ### 6. Restart services
 
 ```bash
