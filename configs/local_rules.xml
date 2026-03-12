@@ -1,0 +1,28 @@
+<!-- Local Rules for VirusTotal Malware Detection -->
+<group name="local,syscheck,virustotal,">
+
+  <!-- Rule 100200: New file in Downloads folder - Trigger VirusTotal Scan -->
+  <rule id="100200" level="7">
+    <if_sid>554</if_sid>
+    <field name="file">Downloads/</field>
+    <description>New file detected in Downloads folder - VirusTotal scan initiated</description>
+    <group>syscheck,virustotal,</group>
+  </rule>
+
+  <!-- Rule 100201: VirusTotal Malware Detected - Triggers Active Response -->
+  <rule id="100201" level="12">
+    <if_sid>87105</if_sid>
+    <field name="virustotal.malicious">1</field>
+    <description>VirusTotal: Malware detected! File automatically quarantined.</description>
+    <group>virustotal,malware,attack,</group>
+  </rule>
+
+  <!-- Rule 100202: VirusTotal High Detection Ratio - SUSPICIOUS -->
+  <rule id="100202" level="10">
+    <if_sid>87105</if_sid>
+    <field name="virustotal.positives">^[5-9]|[1-9][0-9]</field>
+    <description>VirusTotal: File flagged by $(virustotal.positives) antivirus engines</description>
+    <group>virustotal,suspicious,</group>
+  </rule>
+
+</group>
